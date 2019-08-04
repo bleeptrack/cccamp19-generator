@@ -28,7 +28,6 @@ function generate(){
 	compgroup.remove();
 	compgroup = new Group();
 	rows = [];
-	colorcode = [];
 	shuffle(colors);
 	var text = document.getElementById('gentext').value;
 	text = text.trim();
@@ -39,6 +38,9 @@ function generate(){
 	var chaosr = chaosRocket(new Point(w/2-350,h/2));
 	var polyr = polyRocket(new Point(w/2, h/2));
 	var leafr = leafRocket(new Point(w/2+350, h/2));
+	chaosr.strokeWidth = 4.6*1.5;
+	leafr.strokeWidth = 4.6*1.5;
+	polyr.strokeWidth = 8*1.5;
 	
 	scaleToHeight(chaosr, h*0.6);
 	scaleToHeight(polyr, h*0.6);
@@ -283,8 +285,7 @@ function leafRocket(pos){
 	group.addChild(newvein1);
 	group.addChild(newvein2);
 	
-	group.strokeColor= '#99ba00';
-	group.strokeWidth= 7;
+	group.strokeColor= green;
 	
 	group.position = pos;
 	return group;
@@ -437,8 +438,7 @@ function polyRocket(pos){
 		to: pos.add(new Point(0,tipheight+windowheight + windowoffset))
 	}));
 
-	group.strokeColor = '#ffc600';
-	group.strokeWidth = 11;
+	group.strokeColor = orange;
 	
 	group.position = pos;
 	return group;
@@ -477,8 +477,7 @@ function chaosRocket(pos){
 	path.add(new Segment(pos.add(new Point(50,80)), new Point(-40,-40), new Point(topshape,topshape)));
 	path.add(new Segment(pos.add(new Point(basewidth,height)), null, new Point(-15,30)));
 	path.closed = true;
-	path.strokeColor = '#0076ba';
-	path.strokeWidth = 6;
+	path.strokeColor = blue;
 	
 	
 	var window = new Path.Ellipse(new Rectangle(windowpos, new Size(windowsize,windowsize)));
@@ -504,8 +503,6 @@ function chaosRocket(pos){
 		var tmp = rockettop.children[0].clone();
 		rockettop.remove();
 		rockettop = tmp; 
-		tmp.strokeColor = blue;
-		tmp.strokeWidth = 6;
 		console.log(rockettop);
 	}
 	
@@ -541,8 +538,6 @@ function chaosRocket(pos){
 	bottom.add(new Segment(pos.add(new Point(-launcherpos, height+50)), new Point(launcherhandle,0), new Point(-launcherhandle,0)));
 	bottom.add(new Segment(pos.add(new Point(-90,footheight)), new Point(-40,-100), new Point(-60, -100)));
 	bottom.closed = true;
-	bottom.strokeColor = 'black';
-	bottom.strokeWidth = 5;
 	
 	//bottom.scale(rnd(65,100)/100,rnd(45,100)/100, pos.add(new Point(0,380)));
 	
@@ -616,7 +611,7 @@ function downloadSVG(){
     var svgUrl = URL.createObjectURL(svgBlob);
     var downloadLink = document.createElement("a");
     downloadLink.href = svgUrl;
-    downloadLink.download = "ulm_generative.svg";
+    downloadLink.download = "cccamp19.svg";
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
