@@ -503,10 +503,9 @@ function chaosRocket(pos){
 		var tmp = rockettop.children[0].clone();
 		rockettop.remove();
 		rockettop = tmp; 
-		console.log(rockettop);
+		rockettop.strokeColor = blue;
 	}
 	
-	console.log(rockettop.index);
 
 	
 	rockettop.smooth({ type: 'catmull-rom', factor:0.3,  from: 1, to: 4 });
