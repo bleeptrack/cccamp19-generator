@@ -1,0 +1,58 @@
+
+
+#sliderbar{
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	display: flex;
+	justify-content: space-around;
+	margin-bottom: 20px;
+}
+
+#infobar{
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	margin: 10px;
+	color: #0076ba;
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+a{
+	color: #99ba00;
+}
+
+a:active{
+	color: #ffc600;
+}
+
+#gen{
+	width: 30%;
+}
+
+input{
+	width: 60%;
+	border: 3px solid #0076ba;
+	padding: 5px;
+}
+
+button{
+	border: 3px solid #0076ba;
+	padding: 5px 20px;
+	background-color: #0076ba;
+	color: white;
+	font-weight: bold;
+}
+
+button:hover{
+	border: 3px solid #99ba00;
+	background-color: #99ba00;
+}
+
+button:active{
+	border: 3px solid #ffc600;
+	background-color: #ffc600;
+}

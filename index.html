@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- Load the Paper.js library -->
+<script type="text/javascript" src="paper-full.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Marvel&display=swap" rel="stylesheet"> 
+<script type="text/javascript" src="campgen.js">
+</script>
+<link rel="stylesheet" type="text/css" href="style.css"/>
+
+</head>
+<body>
+	<div style="visibility: hidden; font-family: 'Marvel';">div to fix paperjs bug with font</div>
+        <canvas id="myCanvas" style="width:100%;" resize></canvas>
+        
+	<div id="infobar">cccamp19 generator by <a href="http://www.bleeptrack.de">bleeptrack</a> (<a href="https://twitter.com/Bleeptrack">twitter</a>/<a href="https://chaos.social/@bleeptrack">mastodon</a>) - <a href="https://github.com/bleeptrack/cccamp19-generator">code on github</a></div>
+        
+	<div id="sliderbar">
+		<div id="gen">
+		<input type="text" id="gentext" autocomplete="off" placeholder="add your text here or leave black for rocket triple">
+		<button onclick="generate()">generate</button>
+		</div>
+		<button onclick="downloadSVG()">save svg</button>
+	</div>
+	
+	
+    
+</body>
+</html>
+ 
