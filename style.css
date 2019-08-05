@@ -7,7 +7,13 @@
 	width: 100%;
 	display: flex;
 	justify-content: space-around;
+	flex-wrap: wrap;
 	margin-bottom: 20px;
+	
+	color: #0076ba;
+	font-family: sans-serif;
+	font-weight: bold;
+	font-size: 0.8em;
 }
 
 #infobar{
@@ -29,8 +35,8 @@ a:active{
 	color: #ffc600;
 }
 
-#gen{
-	width: 30%;
+.gen{
+	flex-basis: 500px;
 }
 
 input{
@@ -45,6 +51,7 @@ button{
 	background-color: #0076ba;
 	color: white;
 	font-weight: bold;
+	margin:  10px 5px;
 }
 
 button:hover{

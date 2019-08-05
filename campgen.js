@@ -35,13 +35,13 @@ function generate(){
 	var textparts = splitText(text,wordmark.length*2+1);
 	var maxheight = fz*1.3;
     
-	var chaosr = chaosRocket(new Point(w/2-350,h/2));
+	var chaosr = chaosRocket(new Point(w/2-w/5,h/2));
 	var polyr = polyRocket(new Point(w/2, h/2));
-	var leafr = leafRocket(new Point(w/2+350, h/2));
-	chaosr.strokeWidth = 4.6*1.5;
-	leafr.strokeWidth = 4.6*1.5;
-	polyr.strokeWidth = 8*1.5;
-	
+	var leafr = leafRocket(new Point(w/2+w/5, h/2));
+	chaosr.strokeWidth = 4.6 * h*1.5/946;
+	leafr.strokeWidth = 4.6 * h*1.5/946;
+	polyr.strokeWidth = 8 * h*1.5/946;
+	console.log(h);
 	scaleToHeight(chaosr, h*0.6);
 	scaleToHeight(polyr, h*0.6);
 	scaleToHeight(leafr, h*0.6);
@@ -75,7 +75,7 @@ function findRocketPlaces(chaosr, polyr, leafr){
 	};
 	var startcol = rows[0].firstChild.style.fillColor.toCSS(true);
 	rocketByColor[startcol].bounds.bottomLeft = rows[0].firstChild.bounds.topLeft;
-	rocketByColor[startcol].position = rocketByColor[startcol].position.add([10,20]);
+	rocketByColor[startcol].position = rocketByColor[startcol].position.add([10,5]);
 	delete rocketByColor[startcol];
 	
 	Object.keys(rocketByColor).forEach(function(key) {
@@ -611,6 +611,16 @@ function downloadSVG(){
     var downloadLink = document.createElement("a");
     downloadLink.href = svgUrl;
     downloadLink.download = "cccamp19.svg";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+}
+
+function downloadPNG(){
+    var canvas = document.getElementById("myCanvas");
+    var downloadLink = document.createElement("a");
+    downloadLink.href = canvas.toDataURL("image/png;base64");
+    downloadLink.download = "cccamp19.png";
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
