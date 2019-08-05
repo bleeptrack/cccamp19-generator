@@ -16,9 +16,11 @@
 	<div id="infobar">cccamp19 generator by <a href="http://www.bleeptrack.de" target="_blank">bleeptrack</a> (<a href="https://twitter.com/Bleeptrack" target="_blank">twitter</a>/<a href="https://chaos.social/@bleeptrack" target="_blank">mastodon</a>) - <a href="https://github.com/bleeptrack/cccamp19-generator" target="_blank">code on github</a></div>
         
 	<div id="sliderbar">
-		<div class="gen">
-		<input type="text" id="gentext" autocomplete="off" placeholder="add your text here or leave blank for rocket triple">
-		<button onclick="generate()">generate</button>
+		<button id="genrocketbtn" onclick="generateRockets()">generate rockets</button>
+		<div class="midgen">
+			<input type="text" oninput="textchange(value);" id="gentext" autocomplete="off" placeholder="your text">
+			<button id="gentextbtn" onclick="generateText()" >generate text</button>
+			<button id="deltextbtn" onclick="removeText()" >remove text</button>
 		</div>
 		<div class="gen">
 			<button onclick="downloadPNG()">save image</button>

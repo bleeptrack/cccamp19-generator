@@ -2,13 +2,19 @@ var orange = '#ffc600';
 var blue = '#0076ba';
 var green = '#99ba00';
 var fz = 100;
+var maxheight = fz*1.3;
 var colors = [blue, orange, green];
 var rows = [];
 var colorcode = [];
+var rocketplaces = [];
 var border = 30;
 var compgroup;
 var h;
 var w;
+var chaosr;
+var polyr;
+var leafr;
+var text = "";
 
 paper.install(window);
 window.onload = function() {
@@ -18,37 +24,62 @@ window.onload = function() {
 		h = paper.project.view.bounds.height;
 		w = paper.project.view.bounds.width;
 		compgroup = new Group();
+		
+		document.getElementById('deltextbtn').disabled = true;
+		document.getElementById('gentextbtn').disabled = true;
 
-		generate();
+		generateRockets();
 
 }
 
-function generate(){
-	paper.project.clear();
-	compgroup.remove();
-	compgroup = new Group();
-	rows = [];
-	shuffle(colors);
-	var text = document.getElementById('gentext').value;
-	text = text.trim();
-	var wordmark = findWords(text);
-	var textparts = splitText(text,wordmark.length*2+1);
-	var maxheight = fz*1.3;
+function generateRockets(){
+	
+	if(chaosr){
+		chaosr.remove();
+	}
+	if(polyr){
+		polyr.remove();
+	}
+	if(leafr){
+		leafr.remove();
+	}
     
-	var chaosr = chaosRocket(new Point(w/2-w/5,h/2));
-	var polyr = polyRocket(new Point(w/2, h/2));
-	var leafr = leafRocket(new Point(w/2+w/5, h/2));
+	chaosr = chaosRocket(new Point(w/2-w/5,h/2));
+	polyr = polyRocket(new Point(w/2, h/2));
+	leafr = leafRocket(new Point(w/2+w/5, h/2));
+	
 	chaosr.strokeWidth = 4.6 * h*1.5/946;
 	leafr.strokeWidth = 4.6 * h*1.5/946;
 	polyr.strokeWidth = 8 * h*1.5/946;
-	console.log(h);
+	
 	scaleToHeight(chaosr, h*0.6);
 	scaleToHeight(polyr, h*0.6);
 	scaleToHeight(leafr, h*0.6);
+	
+	if(text.length>0){
+		chaosr.strokeWidth = 3.5;
+		polyr.strokeWidth = 3.5;
+		leafr.strokeWidth = 3.5;
 		
-	compgroup.addChild(chaosr);
-	compgroup.addChild(polyr);
-	compgroup.addChild(leafr);
+		scaleToHeight(chaosr, maxheight);
+		scaleToHeight(polyr, maxheight);
+		scaleToHeight(leafr, maxheight);
+
+		findRocketPlaces();
+		//compgroup.position = [w/2,h/2];
+	}
+		
+}
+
+function generateText(){
+	compgroup.remove();
+	compgroup = new Group();
+	
+	rows = [];
+	shuffle(colors);
+	
+	var wordmark = findWords(text);
+	var textparts = splitText(text,wordmark.length*2+1);
 	
 	
 	if(text.length>0){
@@ -62,27 +93,65 @@ function generate(){
 
 		lineText(textparts, wordmark);
 		offsetRows(wordmark);
-		findRocketPlaces(chaosr, polyr, leafr);
+		findRocketPlaces();
+		
 		compgroup.position = [w/2,h/2];
 	}
 }
 
-function findRocketPlaces(chaosr, polyr, leafr){
+function removeText(){
+	compgroup.remove();
+	compgroup = new Group();
+	rows = [];
+	text = "";
+	document.getElementById('gentext').value = "";
+	document.getElementById('deltextbtn').disabled = true;
+	document.getElementById('gentextbtn').disabled = true;
+	generateRockets();
+}
+
+function textchange(txt){
+	text = txt.trim();
+	var genbtn = document.getElementById('gentextbtn');
+	var delbtn = document.getElementById('deltextbtn');
+	if(text.length>0){
+		genbtn.disabled = false;
+		delbtn.disabled = false;
+	}else{
+		genbtn.disabled = true;
+		delbtn.disabled = true;
+	}
+}
+
+function findRocketPlaces(){
+	console.log(rows);
 	var rocketByColor = {
 		'#0076ba': chaosr,
 		'#ffc600': polyr,
 		'#99ba00': leafr
 	};
+
 	var startcol = rows[0].firstChild.style.fillColor.toCSS(true);
+	if(rocketByColor[startcol].index === undefined){
+		rocketByColor[startcol].addTo(paper.project);
+		console.log(rocketByColor[startcol]);
+	}
 	rocketByColor[startcol].bounds.bottomLeft = rows[0].firstChild.bounds.topLeft;
 	rocketByColor[startcol].position = rocketByColor[startcol].position.add([10,5]);
+	compgroup.addChild(rocketByColor[startcol]);
 	delete rocketByColor[startcol];
 	
 	Object.keys(rocketByColor).forEach(function(key) {
+		console.log(key);
 		var col = key;
 		var lastrocket = rocketByColor[col];
+		if(lastrocket.index === undefined){
+			lastrocket.addTo(paper.project);
+		}
 		var places = [];
 		for(var i = 0; i<rows.length; i++){
+			console.log(rows[i].lastChild);
+			
 			if( (i==0 || rows[i].lastChild.bounds.bottomRight.x>=rows[i-1].lastChild.bounds.bottomRight.x) && rows[i].lastChild.style.fillColor.toCSS(true)==col){
 				var pos = new Point(rows[i].lastChild.bounds.bottomRight.x, rows[i].lastChild.point.y)
 				places.push(pos.add([10,0]));
@@ -91,6 +160,7 @@ function findRocketPlaces(chaosr, polyr, leafr){
 		shuffle(places);
 		if(places.length>0){
 			lastrocket.bounds.bottomLeft = places[0];
+			compgroup.addChild(lastrocket);
 		}else{
 			lastrocket.remove();
 		}
@@ -288,6 +358,12 @@ function leafRocket(pos){
 	group.strokeColor= green;
 	
 	group.position = pos;
+	
+	r = rnd(0,1);
+	if(r==0){
+		group.scale(-1,1);
+	}
+	
 	return group;
 }
 
@@ -498,13 +574,13 @@ function chaosRocket(pos){
 	body.remove();
 	
 
-	if(rockettop.children){
-		console.log(rockettop);
-		var tmp = rockettop.children[0].clone();
+	/*if(rockettop.children){
+		
+		var tmp = rockettop.children[0];
 		rockettop.remove();
 		rockettop = tmp; 
 		rockettop.strokeColor = blue;
-	}
+	}*/
 	
 
 	
@@ -540,10 +616,6 @@ function chaosRocket(pos){
 	
 	//bottom.scale(rnd(65,100)/100,rnd(45,100)/100, pos.add(new Point(0,380)));
 	
-	rockettop.reverse();
-	rockettop.add(new Segment(bow, bowhandle.rotate(bowangle), bowhandle.rotate(bowangle+180) ));
-	
-	
 	var loc = rnd(30,100);
 	//var cutbottom = bottom.splitAt(bottom.getLocationAt(loc));
 	var cutbottom = bottom.splitAt(bottom.getLocationAt(bottom.getOffsetOf(pos.add(new Point(-launcherpos, height+50)))-loc/2));
@@ -553,11 +625,16 @@ function chaosRocket(pos){
 	bottom.remove();
 	buttom2.strokeColor = 'red';
 	
-	
-	rockettop.join(buttom2);
-	//rockettop.fullySelected = true;
-	
-	rockettop.removeSegment(15);
+	rockettop.reverse();
+	if(rockettop.children){
+		rockettop.children[0].add(new Segment(bow, bowhandle.rotate(bowangle), bowhandle.rotate(bowangle+180) ));
+		rockettop.children[0].join(buttom2);
+		rockettop.children[0].removeSegment(15);
+	}else{
+		rockettop.add(new Segment(bow, bowhandle.rotate(bowangle), bowhandle.rotate(bowangle+180) ));
+		rockettop.join(buttom2);
+		rockettop.removeSegment(15);
+	}
 	
 	maybe(flip, rockettop, 0.5);
 	
@@ -565,7 +642,6 @@ function chaosRocket(pos){
 	
 	//rockettop.smooth({type: 'catmull-rom', factor:0.1, from: 13, to: 13 });
 	//rockettop.smooth({type: 'catmull-rom', factor:0.8, from: 15, to: 15 });
-	console.log(rockettop.index);
 	return rockettop;
 }
 

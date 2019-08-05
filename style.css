@@ -35,12 +35,12 @@ a:active{
 	color: #ffc600;
 }
 
-.gen{
-	flex-basis: 500px;
+.midgen{
+	flex-basis: 700px;
 }
 
 input{
-	width: 60%;
+	width: 50%;
 	border: 3px solid #0076ba;
 	padding: 5px;
 }
@@ -62,4 +62,9 @@ button:hover{
 button:active{
 	border: 3px solid #ffc600;
 	background-color: #ffc600;
+}
+
+button:disabled {
+  background-color: #dddddd;
+  border: 3px solid #dddddd;
 }
