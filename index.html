@@ -4,8 +4,9 @@
 <!-- Load the Paper.js library -->
 <script type="text/javascript" src="paper-full.js"></script>
 <link href="https://fonts.googleapis.com/css?family=Marvel&display=swap" rel="stylesheet"> 
-<script type="text/javascript" src="campgen.js">
-</script>
+<script type="text/javascript" src="campgen.js"></script>
+<script type="text/javascript" src="startup.js"></script>
+
 <link rel="stylesheet" type="text/css" href="style.css"/>
 
 </head>
@@ -18,7 +19,7 @@
 	<div id="sliderbar">
 		<button id="genrocketbtn" onclick="generateRockets()">generate rockets</button>
 		<div class="midgen">
-			<input type="text" oninput="textchange(value);" id="gentext" autocomplete="off" placeholder="your text">
+			<input type="text" oninput="textchange(value);" id="gentext" autocomplete="off" placeholder="your text (own linebreak: ~)">
 			<button id="gentextbtn" onclick="generateText()" >generate text</button>
 			<button id="deltextbtn" onclick="removeText()" >remove text</button>
 		</div>

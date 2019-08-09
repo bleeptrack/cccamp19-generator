@@ -2,35 +2,23 @@ var orange = '#ffc600';
 var blue = '#0076ba';
 var green = '#99ba00';
 var fz = 100;
+var fkt = 1;
 var maxheight = fz*1.3;
+var lastheight;
 var colors = [blue, orange, green];
 var rows = [];
 var colorcode = [];
 var rocketplaces = [];
 var border = 30;
 var compgroup;
-var h;
 var w;
+var h;
 var chaosr;
 var polyr;
 var leafr;
 var text = "";
 
-paper.install(window);
-window.onload = function() {
-	// Setup directly from canvas id:
-	paper.setup('myCanvas');
-	
-		h = paper.project.view.bounds.height;
-		w = paper.project.view.bounds.width;
-		compgroup = new Group();
-		
-		document.getElementById('deltextbtn').disabled = true;
-		document.getElementById('gentextbtn').disabled = true;
 
-		generateRockets();
-
-}
 
 function generateRockets(){
 	
@@ -44,9 +32,9 @@ function generateRockets(){
 		leafr.remove();
 	}
     
-	chaosr = chaosRocket(new Point(w/2-w/5,h/2));
+	chaosr = chaosRocket(new Point(w/2-h/3,h/2));
 	polyr = polyRocket(new Point(w/2, h/2));
-	leafr = leafRocket(new Point(w/2+w/5, h/2));
+	leafr = leafRocket(new Point(w/2+h/3, h/2));
 	
 	chaosr.strokeWidth = 4.6 * h*1.5/946;
 	leafr.strokeWidth = 4.6 * h*1.5/946;
@@ -56,14 +44,14 @@ function generateRockets(){
 	scaleToHeight(polyr, h*0.6);
 	scaleToHeight(leafr, h*0.6);
 	
-	if(text.length>0){
-		chaosr.strokeWidth = 3.5;
-		polyr.strokeWidth = 3.5;
-		leafr.strokeWidth = 3.5;
+	if(text.length>0){		
+		scaleToHeight(chaosr, maxheight*fkt);
+		scaleToHeight(polyr, maxheight*fkt);
+		scaleToHeight(leafr, maxheight*fkt);
 		
-		scaleToHeight(chaosr, maxheight);
-		scaleToHeight(polyr, maxheight);
-		scaleToHeight(leafr, maxheight);
+		chaosr.strokeWidth = 3.5 * fkt;
+		polyr.strokeWidth = 3.5 * fkt;
+		leafr.strokeWidth = 3.5 * fkt;
 
 		findRocketPlaces();
 		//compgroup.position = [w/2,h/2];
@@ -72,14 +60,26 @@ function generateRockets(){
 }
 
 function generateText(){
-	compgroup.remove();
+	if(compgroup){
+		compgroup.remove();
+	}
+	
 	compgroup = new Group();
 	
 	rows = [];
 	shuffle(colors);
 	
-	var wordmark = findWords(text);
-	var textparts = splitText(text,wordmark.length*2+1);
+	var wordmark;
+	var textparts;
+	
+	if(text.includes('~')){
+		wordmark = findWords(text.replace(/~/g,''));
+		textparts = text.replace(" ",'').split('~');
+	}else{
+		wordmark = findWords(text);
+		textparts = splitText(text,wordmark.length*2+1);
+	}
+	
 	
 	
 	if(text.length>0){
@@ -95,6 +95,16 @@ function generateText(){
 		offsetRows(wordmark);
 		findRocketPlaces();
 		
+		if(h<w){
+			fkt = h*0.85/compgroup.bounds.height;
+		}else{
+			fkt = w*0.85/compgroup.bounds.width;
+		}
+		compgroup.scale(fkt);
+		chaosr.strokeWidth = chaosr.strokeWidth * fkt;
+		polyr.strokeWidth = polyr.strokeWidth * fkt;
+		leafr.strokeWidth = leafr.strokeWidth * fkt;
+
 		compgroup.position = [w/2,h/2];
 	}
 }
@@ -124,17 +134,14 @@ function textchange(txt){
 }
 
 function findRocketPlaces(){
-	console.log(rows);
-	var rocketByColor = {
-		'#0076ba': chaosr,
-		'#ffc600': polyr,
-		'#99ba00': leafr
-	};
-
+	var rocketByColor = {};
+	rocketByColor[blue] = chaosr;
+	rocketByColor[orange] = polyr;
+	rocketByColor[green] = leafr;
+		
 	var startcol = rows[0].firstChild.style.fillColor.toCSS(true);
 	if(rocketByColor[startcol].index === undefined){
 		rocketByColor[startcol].addTo(paper.project);
-		console.log(rocketByColor[startcol]);
 	}
 	rocketByColor[startcol].bounds.bottomLeft = rows[0].firstChild.bounds.topLeft;
 	rocketByColor[startcol].position = rocketByColor[startcol].position.add([10,5]);
@@ -142,7 +149,6 @@ function findRocketPlaces(){
 	delete rocketByColor[startcol];
 	
 	Object.keys(rocketByColor).forEach(function(key) {
-		console.log(key);
 		var col = key;
 		var lastrocket = rocketByColor[col];
 		if(lastrocket.index === undefined){
@@ -150,7 +156,6 @@ function findRocketPlaces(){
 		}
 		var places = [];
 		for(var i = 0; i<rows.length; i++){
-			console.log(rows[i].lastChild);
 			
 			if( (i==0 || rows[i].lastChild.bounds.bottomRight.x>=rows[i-1].lastChild.bounds.bottomRight.x) && rows[i].lastChild.style.fillColor.toCSS(true)==col){
 				var pos = new Point(rows[i].lastChild.bounds.bottomRight.x, rows[i].lastChild.point.y)
