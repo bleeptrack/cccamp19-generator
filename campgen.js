@@ -72,6 +72,8 @@ function generateText(){
 	var wordmark;
 	var textparts;
 	
+	text = text.replace("\\n", "~");
+	text = text.replace("\\r", "~");
 	if(text.includes('~')){
 		wordmark = findWords(text.replace(/~/g,''));
 		textparts = text.replace(" ",'').split('~');
