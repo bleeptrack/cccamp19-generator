@@ -6,5 +6,6 @@ https://cccamp19.bleeptrack.de/api/ gives random images. Set those parameters:
 - w/h: width/height in pixels
 - filetype: png(default), jpg, bmp, svg
 - text if wanted. Don't forget to urlencode spaces!
+- greyscale: set to 1 if you need a grey image. 
 
 Example: https://cccamp19.bleeptrack.de/api/?filetype=jpg&w=400&h=300
